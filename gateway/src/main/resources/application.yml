@@ -1,0 +1,36 @@
+server:
+  port: 6001
+
+jwt:
+  secret: Key#SuperSecret$Autor#JavaMicroservices#937157653
+
+spring:
+  application:
+    name: springgateway
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+      routes:      
+      - id: servicio-seguridad
+        uri: http://localhost:82
+        predicates:
+          - Path=/autor/**
+        filters:
+          - StripPrefix=1
+       - id: servicio-pago
+        uri: http://localhost:81
+        predicates:
+          - Path=/autor/**
+        filters:
+          - StripPrefix=1
+          - JwtAuthenticationFilter
+            
+       
+

@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  app_seguridad:
+    container_name: postgresdb
+    build:
+      context: ./MSUsuario
+    ports:
+      - "8088:87"
+    networks:
+    - TDA
+  app_pago:
+    container_name: bd_mysql
+    build:
+      context: ./MSPaciente
+    ports:
+      - "8087:87"
+    networks:
+    - TDA
+  app_movement:
+    container_name: ms-laboratorio
+    build:
+      context: ./MSLaboratorio
+    ports:
+      - "8086:86"
+    networks:
+    - tDA
+  app_factura:
+    container_name: SQLdb
+    build:
+      context: ./MSHisctoriaC
+    ports:
+      - "8085:85"
+    networks:
+    - TDA
+ 
+  app_gateway:
+    build:
+      context: ./Gateway
+    ports:
+      - "6003:6001"
+    depends_on:
+      - app_seguridad
+      - app_pago
+      - app_movement
+      - app_factura
+      
+    networks:
+    - TDA
+networks:
+  TDA:
+    name: ms-unu
